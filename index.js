@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const prefix = 'f-';
+const config = require("./config.json");
 const fetch = require('node-fetch');
 const keepalive = require('./Server.js');
 
@@ -13,10 +13,19 @@ client.on('message', async message => {
   if(message.author.bot || !message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).split(' ');
   const command = args.shift();
-   if(command.toLowerCase() === "ping") {
-     message.channel.send('Pong')
+
+   if(command.toLowerCase() === "invite") {
+    message.channel.send('https://discord.com/api/oauth2/authorize?client_id=786803841328742451&permissions=4094033009&scope=bot') 
    }
-   else if(command === 'order') {
+   if (command === "ping") {
+
+    const timeTaken = Date.now() - message.createdTimestamp;
+     message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
+    };
+   if(command.toLowerCase() === "support") {
+    message.channel.send('https://discord.gg/EppgcjMWaY') 
+   };
+   if(command.toLowerCase() === 'order');
      if(!args[0]) return message.channel.send('What should I order, specify next time. ');
      if(args[0].toLowerCase() === 'random') {
       let rnd = await fetch('https://foodish-api.herokuapp.com/api/');
@@ -55,15 +64,8 @@ client.on('message', async message => {
    }
      else if(args.join(' ') === ('steak')) {
        const steak = ['https://th.bing.com/th/id/R1cc27aeb51932e50976a10255075910e?rik=Gp8R7UJSFdr8Sw&riu=http%3a%2f%2ftherenaissancebeard.com%2fwp-content%2fuploads%2f2014%2f01%2fthick-steak.jpg&ehk=8Bi2BHvTK%2b6uY8w9vRjsIFCCVOLTNj2e%2fvHwYnjEI5s%3d&risl=&pid=ImgRaw','https://th.bing.com/th/id/OIP.XiyD_xtvg-BeY1voLS0cAAHaFj?pid=ImgDet&w=1396&h=1047&rs=1','https://th.bing.com/th/id/OIP.Xs4Rm4KHw4_1HvSppXeRxwHaHe?pid=ImgDet&w=1118&h=1128&rs=1','https://th.bing.com/th/id/OIP.4Agg78l1P_9G_Yn_JOKkcAAAAA?pid=ImgDet&w=363&h=484&rs=1'];
-      message.channel.send(steak[Math.floor(Math.random() * steak.length)]);
-  };
-   if(command === 'invite') {
-      message.channel.send ('https://discord.com/api/oauth2/authorize?client_id=786803841328742451&permissions=8&scope=bot')
-  }
-     
-   else if(command === 'help') {
-      message.channel.send ('HELP PAGE\n f-order (input)order food\n f-invite invite the bot \n f-server join the support server');
-   }
-});
+      message.channel.send(steak[Math.floor(Math.random() * steak.length)]); 
+     }
+})
 keepalive()
-client.login(process.env.TOKEN); 
+client.login(config.token);
