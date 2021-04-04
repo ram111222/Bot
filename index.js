@@ -26,8 +26,8 @@ client.on('message', async message => {
    if(command.toLowerCase() === "support") {
     message.channel.send('https://discord.gg/EppgcjMWaY') 
    };
-   if(command.toLowerCase() === 'order');
-     if(!args[0]) return message.channel.send('What should I order, specify next time. ');
+   if(command === 'order') {
+     if(!args[0]) return message.channel.send('What should I order, specify next time. ')};
      if(args[0].toLowerCase() === 'random') {
       let rnd = await fetch('https://foodish-api.herokuapp.com/api/');
       rnd = await rnd.json()
