@@ -1,8 +1,15 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const prefix = 'f-';
+const config = require("./config.json");
+const { prefix, token} = require ('./config.json');
 const fetch = require('node-fetch');
 const keepalive = require('./Server.js');
+const { Client, Intents } = require('discord.js');
+{
+    const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+}
+
+
 
 client.on('ready', () => {
   console.log("bot is online dingus")
@@ -13,17 +20,21 @@ client.on('message', async message => {
   if(message.author.bot || !message.content.startsWith(prefix)) return;
   const args = message.content.slice(prefix.length).split(' ');
   const command = args.shift();
-   if(command.toLowerCase() === "ping") {
-     message.channel.send('Pong')
+
+   if(command.toLowerCase() === "invite") {
+    message.channel.send('https://discord.com/api/oauth2/authorize?client_id=786803841328742451&permissions=4094033009&scope=bot') 
    }
-   else if(command === 'order') {
-     if(!args[0]) return message.channel.send('What should I order, specify next time. ');
-     if(args[0].toLowerCase() === 'random') {
-      let rnd = await fetch('https://foodish-api.herokuapp.com/api/');
-      rnd = await rnd.json()
-      message.channel.send(rnd.image);
-     }
-     else if(args[0].toLowerCase() === 'pizza') {
+   if (command === "ping") {
+
+    const timeTaken = Date.now() - message.createdTimestamp;
+     message.reply(`Pong! This message had a latency of ${timeTaken}ms.`);
+    };
+   if(command.toLowerCase() === "support") {
+    message.channel.send('https://discord.gg/EppgcjMWaY') 
+   };
+   if(command === 'order') {
+     if(!args[0]) return message.channel.send('What should I order, specify next time. ')};
+     if(args[0].toLowerCase() === 'pizza') {
        const pizzas = ['https://sfo2.digitaloceanspaces.com/couchsessions-api/2019/06/Pizza-Wallpaper-pizza-6333801-1024-768-600x337.jpg', 'https://www.skigondel.nl/images/stories/virtuemart/product/pizza-catering-event.jpg', 'https://s.abcnews.com/images/US/GTY_pizza_jef_140528_12x5_992.jpg', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ2yX1zcGQbZqEerEpZlPIMFkO7jl7XAfFKA&usqp=CAU', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkdSN4DLhfDU-mwavEPvGhBbkHPMRNO38Dow&usqp=CAU'
       , 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNBxGhJdakeHCG7bBkMnRIuAlgv5sOohqn_g&usqp=CAU', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvQjpGQpmJyd83bq8JfFlFMfVV_pd5gYt2iQ&usqp=CAU', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkMQj_Jt4jpSlhU8COZd3Vk7TktZFs2kRncw&usqp=CAU'];
       message.channel.send(pizzas[Math.floor(Math.random() * pizzas.length)]);
@@ -55,15 +66,8 @@ client.on('message', async message => {
    }
      else if(args.join(' ') === ('steak')) {
        const steak = ['https://th.bing.com/th/id/R1cc27aeb51932e50976a10255075910e?rik=Gp8R7UJSFdr8Sw&riu=http%3a%2f%2ftherenaissancebeard.com%2fwp-content%2fuploads%2f2014%2f01%2fthick-steak.jpg&ehk=8Bi2BHvTK%2b6uY8w9vRjsIFCCVOLTNj2e%2fvHwYnjEI5s%3d&risl=&pid=ImgRaw','https://th.bing.com/th/id/OIP.XiyD_xtvg-BeY1voLS0cAAHaFj?pid=ImgDet&w=1396&h=1047&rs=1','https://th.bing.com/th/id/OIP.Xs4Rm4KHw4_1HvSppXeRxwHaHe?pid=ImgDet&w=1118&h=1128&rs=1','https://th.bing.com/th/id/OIP.4Agg78l1P_9G_Yn_JOKkcAAAAA?pid=ImgDet&w=363&h=484&rs=1'];
-      message.channel.send(steak[Math.floor(Math.random() * steak.length)]);
-  };
-   if(command === 'invite') {
-      message.channel.send ('https://discord.com/api/oauth2/authorize?client_id=786803841328742451&permissions=8&scope=bot')
-  }
-     
-   else if(command === 'help') {
-      message.channel.send ('HELP PAGE\n f-order (input)order food\n f-invite invite the bot \n f-server join the support server');
-   }
-});
+      message.channel.send(steak[Math.floor(Math.random() * steak.length)]); 
+     }
+})
 keepalive()
-client.login(process.env.TOKEN); 
+client.login(config.token);
