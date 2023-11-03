@@ -69,5 +69,4 @@ client.on('message', async message => {
       message.channel.send(steak[Math.floor(Math.random() * steak.length)]); 
      }
 })
-keepalive()
 client.login(config.token);
